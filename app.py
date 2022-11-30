@@ -3,11 +3,43 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-bf = pd.read_csv('./data/train.csv')
+
+st.set_page_config(
+    page_title = "Teste do Streamlit por Gabriel Alves",
+    layout = "wide",
+    menu_items = {
+        'About': "TESTE DO ABOUT"
+    }
+)
+
+@st.cache
+def readData():
+    dataset = pd.read_csv('./data/train.csv')
+    # Normalizar valores das idades
+    dataset['age_of_car'] = round(dataset['age_of_car'].mul(100))
+    dataset['age_of_policyholder'] = round(dataset['age_of_policyholder'].mul(100))
+    return dataset
+bf = readData()
+
+#Para não calcular toda vez que ativar o checkbox
+@st.cache
+def manterDados():
+    avrg = bf.mean()
+    return avrg
 
 st.title('Ánalise de dados com o dataset Car-Insurance')
 st.write('Fonte: https://www.kaggle.com/datasets/ifteshanajnin/carinsuranceclaimprediction-classification')
 
+
+if st.checkbox('Show dataset'):
+    st.subheader('Dataset')
+    st.dataframe(bf)
+
+if st.checkbox('Show the average of columns'):
+    st.subheader('The average of columns')
+    st.table(manterDados())
+
+#________________GRÁFICOS_________________#
 segment_a = bf.fuel_type.loc[bf.segment == "A"].value_counts()
 segment_b1 = bf.fuel_type.loc[bf.segment == "B1"].value_counts()
 segment_b2 = bf.fuel_type.loc[bf.segment == "B2"].value_counts()
@@ -40,6 +72,7 @@ plt.title('Tipos de combustível por Segmento de carro')
 st.pyplot(plt)
 
 plt.clf()
+
 #___________________________________________#
 
 
@@ -70,7 +103,9 @@ plt.title('Idades com poucas chances de reivindicar o seguro')
 st.pyplot(plt)
 
 plt.clf()
+
 #___________________________________________#
+
 claimChance = bf.model.loc[bf.is_claim == 1].value_counts(normalize=True)
 
 x = claimChance.values
@@ -78,3 +113,14 @@ plt.title('Dentre todos os carros que tem grande chance de solicitar seguro dent
 plt.pie(x, labels=["M6", "M1","M4","M8","M7","M9","M3","M5","M2","M10","M11"], autopct='%1.1f%%')
 
 st.pyplot(plt)
+
+#_____________GRÁFICOS USANDO APENAS STREAMLIT________________#
+
+st.subheader("Model X is_claim")
+st.bar_chart(data=bf, x='model', y='is_claim')
+
+st.subheader("Area X is_claim")
+st.bar_chart(data=bf, x='area_cluster', y='is_claim')
+
+st.subheader("Age X is_claim")
+st.bar_chart(data=bf, x='age_of_policyholder', y='is_claim')
