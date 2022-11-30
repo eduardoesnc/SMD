@@ -3,10 +3,20 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+st.set_page_config(
+    page_title = "Teste do Streamlit por Gabriel Alves",
+    layout = "wide",
+    menu_items = {
+        'About': "TESTE DO ABOUT"
+    }
+)
+
 @st.cache
 def readData():
     dataset = pd.read_csv('./data/train.csv')
     # Normalizar valores das idades
+    dataset['age_of_car'] = round(dataset['age_of_car'].mul(100))
     dataset['age_of_policyholder'] = round(dataset['age_of_policyholder'].mul(100))
     return dataset
 bf = readData()
@@ -104,7 +114,7 @@ plt.pie(x, labels=["M6", "M1","M4","M8","M7","M9","M3","M5","M2","M10","M11"], a
 
 st.pyplot(plt)
 
-#___________________________________________#
+#_____________GRÁFICOS USANDO APENAS STREAMLIT________________#
 
 st.subheader("Model X is_claim")
 st.bar_chart(data=bf, x='model', y='is_claim')
