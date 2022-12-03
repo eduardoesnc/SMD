@@ -16,7 +16,7 @@ st.set_page_config(
 def readData():
     dataset = pd.read_csv('./data/train.csv')
     # Normalizar valores das idades
-    dataset['age_of_car'] = round(dataset['age_of_car'].mul(100))
+    dataset['age_of_car'] = round(dataset['age_of_car'].mul(10))
     dataset['age_of_policyholder'] = round(dataset['age_of_policyholder'].mul(100))
     return dataset
 bf = readData()
