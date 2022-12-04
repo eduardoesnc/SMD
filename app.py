@@ -32,6 +32,7 @@ st.title('Ánalise de dados com o dataset Car-Insurance')
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
+
 csv = convert_df(bf)
 
 st.download_button(
